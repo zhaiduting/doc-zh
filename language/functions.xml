@@ -1411,24 +1411,38 @@ var_export($x);  // 输出 1
 <![CDATA[
 <?php
 class Foo {
-   public function method() {}
-   public static function staticmethod() {}
-   public function __invoke() {}
+   public function method() {echo 'method';}
+   public static function staticmethod() {echo 'staticmethod';}
+   public function __invoke() {echo '__invoke';}
 }
 $obj = new Foo();
 $classStr = 'Foo';
 $methodStr = 'method';
 $staticmethodStr = 'staticmethod';
+
 $f1 = strlen(...);
-$f2 = $obj(...);  // invokable object
+echo $f1('Hello Php8.1') . "\n"; // 输出字符串的长度 12
+
+$f2 = $obj(...);     // 得到一个可调用的对象
+echo $f2() . "\n";   // __invoke
+
 $f3 = $obj->method(...);
+echo $f3() . "\n";   // method
 $f4 = $obj->$methodStr(...);
+echo $f4() . "\n";   // method
+
 $f5 = Foo::staticmethod(...);
+echo $f5() . "\n";   // staticmethod
 $f6 = $classStr::$staticmethodStr(...);
-// traditional callable using string, array
+echo $f6() . "\n";   // staticmethod
+
+echo "\n以下为传统的调用方式，函数名称使用字符串或数组\n";
 $f7 = 'strlen'(...);
+echo $f7('Hello Php8.1') . "\n"; // 12
 $f8 = [$obj, 'method'](...);
+echo $f8() . "\n";   // method
 $f9 = [Foo::class, 'staticmethod'](...);
+echo $f9() . "\n";   // staticmethod
 ?>
 ]]>
     </programlisting>
